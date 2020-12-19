@@ -1,0 +1,21 @@
+name: Deploy to production
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install deps
+        run: yarn
+
+      - name: Deploy English version
+        run: VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }} VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_EN }} yarn deploy:vercel --token ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Portuguese version
+        run: VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }} VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_PT }} yarn deploy:vercel --token ${{ secrets.VERCEL_TOKEN }}
